@@ -12,7 +12,7 @@ from datetime import datetime
 from cv_bridge import CvBridge
 from geometry_msgs.msg import Point, PointStamped, PolygonStamped, Polygon
 from visualization_msgs.msg import Marker, MarkerArray
-from std_msgs.msg import ColorRGBA, Float64, Header, String, Time
+from std_msgs.msg import ColorRGBA, Float64, Header, String, Time, Int16
 from interop.msg import (Color, FlyZone, FlyZoneArray, 
                          Orientation, Shape, Target, TargetType)
 
@@ -273,6 +273,14 @@ class MissionDeserializer(object):
         emergent_obj.point.y = northing
 
         return emergent_obj
+    
+    @classmethod
+    def __utm_zone(cls, json):
+        ref_zone = String()
+        _, _, letter, num = utm.from_latlon(json["latitude"], 
+                                            json["longitude"])
+        data = "%s%d".format(letter, num)
+        ref_zone.data = data
 
     @classmethod
     def from_json(cls, json, frame):
@@ -297,9 +305,9 @@ class MissionDeserializer(object):
                                                frame)
         emergent_obj = cls.__emergent_object(json["emergent_last_known_pos"],
                                              frame)
-    
+        utm_zone = cls.__utm_zone(json["home_pos"])
         return (flyzones, search_grid, waypoints, air_drop_pos,
-                off_axis_targ, emergent_obj)
+                off_axis_targ, emergent_obj, utm_zone)
 
 
 class ObstaclesDeserializer(object):
