@@ -276,6 +276,16 @@ class MissionDeserializer(object):
     
     @classmethod
     def __utm_zone(cls, json):
+        """
+        Deserializes the home position and retrieves the UTM zone.
+
+        Args:
+            json: JSON dict containing the home position.
+        
+        Returns:
+            A String message containing the UTM Zone encoded by an 
+            alphabet letter followed by a number.
+        """
         ref_zone = String()
         _, _, letter, num = utm.from_latlon(json["latitude"], 
                                             json["longitude"])
@@ -295,9 +305,9 @@ class MissionDeserializer(object):
 
         Returns:
             A tuple of (FlyZoneArray, PolygonStamped, Marker, PointStamped,
-            PointStamped, PointStamped) corresponding to the flyzones, search
-            grid, waypoints, air drop position, off axis target location, and
-            the emergent object location.
+            PointStamped, PointStamped, String) corresponding to the flyzones, 
+            search grid, waypoints, air drop position, off axis target 
+            location, the emergent object location, and the UTM Zone.
         """
         flyzones = cls.__get_flyzone(json["fly_zones"], frame)
         search_grid = cls.__get_search_grid(json["search_grid_points"], frame)
