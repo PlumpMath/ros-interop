@@ -279,8 +279,10 @@ class MissionDeserializer(object):
         ref_zone = String()
         _, _, letter, num = utm.from_latlon(json["latitude"], 
                                             json["longitude"])
-        data = "%s%d".format(letter, num)
+        data = "{0}{1}".format(letter, num)
         ref_zone.data = data
+
+        return ref_zone
 
     @classmethod
     def from_json(cls, json, frame):

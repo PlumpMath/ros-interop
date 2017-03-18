@@ -13,7 +13,7 @@ from visualization_msgs.msg import Marker
 from std_srvs.srv import Trigger
 from interop.srv import GetMissionByID
 from interop.msg import FlyZoneArray
-
+from std_msgs.msg import String
 
 def publish_mission(timer):
     """Requests and publishes the mission information."""
